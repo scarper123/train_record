@@ -37,7 +37,10 @@ const RecordTitle = ({record}) =>
 const RecordFilter = (props) => (
     <Filter {...props}>
         <TextInput label="Search" source="q" alwaysOn />
-        <ReferenceInput label="User" source="userId" reference="users" allowEmpty>
+        <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
+            <SelectInput optionText="name" />
+        </ReferenceInput>
+        <ReferenceInput label="User" source="course_id" reference="courses" allowEmpty>
             <SelectInput optionText="name" />
         </ReferenceInput>
     </Filter>

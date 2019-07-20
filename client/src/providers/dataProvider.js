@@ -135,7 +135,7 @@ const convertHTTPResponseToDataProvider = (response, type, resource, params) => 
 
             return {
                 data: json.map(x => x),
-                total: 100
+                total: json.length
                 // total: parseInt(headers.get('content-range').split('/').pop(), 10),
             };
         case CREATE:

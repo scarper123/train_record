@@ -5,11 +5,10 @@
 # @Link    : http://example.org
 # @Version : $Id$
 
-from flask_restful import Resource, abort, reqparse
+from flask_restful import Resource, reqparse
 
 from src.models import User
-from src import db
-from .settings import ResourceMixin
+from .helper import ResourceObjectMixin, ResourceListMixin
 
 """
 name = db.Column(db.String(64), nullable=False, unique=True)
@@ -27,58 +26,12 @@ UserParser.add_argument('role_id', help='User role id')
 UserParser.add_argument('email', help='User email')
 
 
-def update_user(args, user=None):
-    if user is None:
-        user = User(vars(args))
-    else:
-        for name, value in vars(args).items():
-            setattr(user, name, value)
-    return user
+class UserResource(Resource, ResourceObjectMixin):
+    model_class = User
+    request_parser = UserParser
 
 
-def get_user_by_id(user_id):
-    user = User.query.get(user_id)
-    if not user:
-        abort(404, 'User[%r] not exist' % user_id)
-    return user
-
-
-class UserResource(Resource, ResourceMixin):
-    def get(self, user_id):
-        user = get_user_by_id(user_id)
-        return user.to_json(), 200, self.header
-
-    def delete(self, user_id):
-        user = get_user_by_id(user_id)
-        db.session.delete(user)
-        db.session.commit()
-
-        return user.to_json(), 200, self.header
-
-    def put(self, user_id):
-        user = get_user_by_id(user_id)
-        args = UserParser.parse_args()
-
-        user = update_user(args, user)
-
-        db.session.merge(user)
-        db.session.commit()
-
-        return user.to_json(), 201, self.header
-
-
-class UserListResource(Resource, ResourceMixin):
+class UserListResource(Resource, ResourceListMixin):
     """docstring for UserList"""
-
-    def get(self):
-        user_list = [user.to_json() for user in User.query.all()]
-        return user_list, 200, self.header
-
-    def post(self):
-        args = UserParser.parse_args()
-
-        user = update_user(args, None)
-        db.session.add(user)
-        db.session.commit()
-
-        return user.to_json(), 201, self.header
+    model_class = User
+    request_parser = UserParser

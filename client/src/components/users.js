@@ -23,23 +23,34 @@ import {
     LongTextInput,
     Create,
     BooleanInput,
-    EditButton
+    EditButton,
+    Responsive,
+    SimpleList
 } from 'react-admin';
 import MyUrlField from './MyUrlField';
 
 
 export const UserList = props => (
     <List {...props}>
-        <Datagrid rowClick="edit">
-            <TextField source="id" />
-            <TextField source="name" />
-            <EmailField source="email" />
-            <BooleanField source="active" />
-            <ReferenceField source="role_id" reference="roles">
+        <Responsive 
+        small={
+            <SimpleList
+                primaryText={user => user.name}
+                secondaryText={user => user.email}
+                />
+        }
+        medium={
+            <Datagrid rowClick="edit">
                 <TextField source="id" />
-            </ReferenceField>
-            <EditButton />
-        </Datagrid>
+                <TextField source="name" />
+                <EmailField source="email" />
+                <BooleanField source="active" />
+                <ReferenceField source="role_id" reference="roles">
+                    <TextField source="id" />
+                </ReferenceField>
+                <EditButton />
+            </Datagrid>
+        } />
     </List>
 )
 

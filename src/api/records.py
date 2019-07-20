@@ -6,14 +6,13 @@
 # @Version : $Id$
 
 import datetime
-from flask_restful import Resource, abort, reqparse
+from flask_restful import Resource, reqparse
 
 from src.models import Record
-from src import db
-from .settings import ResourceMixin
+from .helper import ResourceObjectMixin, ResourceListMixin
 
 """
-record_id = db.Column(db.Integer, primary_key=True)
+inst_id = db.Column(db.Integer, primary_key=True)
 userId = db.Column(db.Integer,
                    db.ForeignKey(User.userId),
                    nullable=False)
@@ -26,65 +25,18 @@ comment = db.Column(db.Text())
 """
 
 RecordParser = reqparse.RequestParser()
-RecordParser.add_argument('userId', required=True, help='User ID')
-RecordParser.add_argument('courseId', required=True, help='Course ID')
+RecordParser.add_argument('user_id', required=True, help='User ID')
+RecordParser.add_argument('course_id', required=True, help='Course ID')
 RecordParser.add_argument('logged', type=datetime.datetime,
                           help='Record logged time')
 RecordParser.add_argument('comment', help='Record comment')
 
 
-def update_record(args, record=None):
-    if record is None:
-        record = Record(vars(args))
-    else:
-        for name, value in vars(args).items():
-            setattr(record, name, value)
-    return record
+class RecordResource(Resource, ResourceObjectMixin):
+    model_class = Record
+    request_parser = RecordParser
 
 
-def get_record_by_id(record_id):
-    record = Record.query.get(record_id)
-    if not record:
-        abort(404, 'Record[%r] not exist' % record_id)
-    return record
-
-
-class RecordResource(Resource, ResourceMixin):
-    def get(self, record_id):
-        record = get_record_by_id(record_id)
-        return record.to_json(), 200, self.header
-
-    def delete(self, record_id):
-        record = get_record_by_id(record_id)
-        db.session.delete(record)
-        db.session.commit()
-
-        return record.to_json(), 200, self.header
-
-    def put(self, record_id):
-        record = get_record_by_id(record_id)
-        args = RecordParser.parse_args()
-
-        record = update_record(args, record)
-
-        db.session.merge(record)
-        db.session.commit()
-
-        return record.to_json(), 200, self.header
-
-
-class RecordListResource(Resource, ResourceMixin):
-    """docstring for UserList"""
-
-    def get(self):
-        record_list = [record.to_json() for record in Record.query.all()]
-        return record_list, 200, self.header
-
-    def post(self):
-        args = RecordParser.parse_args()
-
-        record = update_record(args, None)
-        db.session.add(record)
-        db.session.commit()
-
-        return record.to_json()
+class RecordListResource(Resource, ResourceListMixin):
+    model_class = Record
+    request_parser = RecordParser

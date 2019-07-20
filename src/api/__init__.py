@@ -15,12 +15,12 @@ from .roles import RoleResource, RoleListResource
 
 def registerApiResource(app):
     api = Api(app, prefix='/api/json')
-    api.add_resource(UserResource, '/users/<int:user_id>')
+    api.add_resource(UserResource, '/users/<int:inst_id>')
     api.add_resource(UserListResource, '/users')
-    api.add_resource(CourseResource, '/courses/<int:course_id>')
+    api.add_resource(CourseResource, '/courses/<int:inst_id>')
     api.add_resource(CourseListResource, '/courses')
-    api.add_resource(RecordResource, '/records/<int:record_id>')
+    api.add_resource(RecordResource, '/records/<int:inst_id>')
     api.add_resource(RecordListResource, '/records')
 
-    api.add_resource(RoleResource, '/roles/<int:role_id>')
+    api.add_resource(RoleResource, '/roles/<int:inst_id>')
     api.add_resource(RoleListResource, '/roles')

@@ -12,18 +12,21 @@ import jsonServerProvider from 'ra-data-json-server';
 import PostIcon from '@material-ui/icons/Book';
 import UserIcon from '@material-ui/icons/Group';
 
-import Dashboard from './Dashboard';
-import authProvider from './authProvider';
-import dataProvider from './dataProvider';
-import {UserList, UserCreate, UserEdit } from './users';
-import { RecordList, RecordEdit, RecordCreate } from './records';
+
+import authProvider from './providers/authProvider';
+import dataProvider from './providers/dataProvider';
+import Dashboard from './components/Dashboard';
+import {UserList, UserCreate, UserEdit } from './components/users';
+import { RecordList, RecordEdit, RecordCreate } from './components/records';
+import { CourseList, CourseEdit, CourseCreate } from './components/courses';
+import { RoleList, RoleEdit, RoleCreate } from './components/roles';
 
 const App = () => (
   <Admin dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider}>
     <Resource name="records" list={RecordList} edit={RecordEdit} create={RecordCreate} icon={PostIcon} />
-    <Resource name="courses" list={ListGuesser} edit={EditGuesser} />
+    <Resource name="courses" list={CourseList} edit={CourseEdit} create={CourseCreate}/>
     <Resource name="users" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon} />
-    <Resource name="roles" list={ListGuesser} edit={EditGuesser} />
+    <Resource name="roles" list={RoleList} edit={RoleEdit} create={RoleCreate} />
   </Admin>
 );
 
