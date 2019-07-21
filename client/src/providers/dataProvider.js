@@ -47,10 +47,7 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
                     filter: JSON.stringify(params.filter),
                 };
                 return {
-                    url: `${API_URL}/${resource}?${stringify(query)}`,
-                    options: {
-                        method: 'GET'
-                    }
+                    url: `${API_URL}/${resource}?${stringify(query)}`
                 };
             }
         case GET_ONE:

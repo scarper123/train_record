@@ -40,7 +40,7 @@ const RecordFilter = (props) => (
         <ReferenceInput label="User" source="user_id" reference="users" allowEmpty>
             <SelectInput optionText="name" />
         </ReferenceInput>
-        <ReferenceInput label="User" source="course_id" reference="courses" allowEmpty>
+        <ReferenceInput label="Course" source="course_id" reference="courses" allowEmpty>
             <SelectInput optionText="name" />
         </ReferenceInput>
     </Filter>
@@ -48,7 +48,7 @@ const RecordFilter = (props) => (
 
 
 export const RecordList = (props) => (
-    <List {...props}>
+    <List {...props} filters={<RecordFilter/>}>
         <Responsive
             small={
                 <SimpleList

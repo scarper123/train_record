@@ -6,6 +6,7 @@
 # @Version : $Id$
 
 import datetime
+
 from flask_restful import Resource, reqparse
 
 from src.models import Record
@@ -25,11 +26,20 @@ comment = db.Column(db.Text())
 """
 
 RecordParser = reqparse.RequestParser()
-RecordParser.add_argument('user_id', required=True, help='User ID')
-RecordParser.add_argument('course_id', required=True, help='Course ID')
-RecordParser.add_argument('logged', type=datetime.datetime,
+RecordParser.add_argument('user_id',
+                          required=True,
+                          type=int,
+                          help='User ID')
+RecordParser.add_argument('course_id',
+                          required=True,
+                          type=int,
+                          help='Course ID')
+RecordParser.add_argument('logged',
+                          required=True,
+                          type=datetime.datetime,
                           help='Record logged time')
-RecordParser.add_argument('comment', help='Record comment')
+RecordParser.add_argument('comment',
+                          help='Record comment')
 
 
 class RecordResource(Resource, ResourceObjectMixin):

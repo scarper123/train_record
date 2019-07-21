@@ -5,6 +5,8 @@
 # @Link    : http://example.org
 # @Version : $Id$
 
+import  json
+from flask import  request
 from flask_restful import abort
 from src import db
 
@@ -69,7 +71,10 @@ class ResourceListMixin(ResourceMixin):
     """docstring for ResourceListMixin"""
 
     def get(self):
-        inst_list = [inst.to_json() for inst in self.model_class.query.all()]
+        args = self.request_parser.parse_args()
+        print(args)
+        inst_list = self.model_class.query.all()
+        inst_list = [inst.to_json() for inst in inst_list]
         return inst_list, 200, self.header
 
     def post(self):
