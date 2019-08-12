@@ -7,8 +7,10 @@
     <a href="{{url_for('.register')}}">
       <button type="button" class="btn btn-sm btn-outline-secondary">Add</button>
     </a>
-    <button type="button" class="btn btn-sm btn-outline-secondary">Export
-    </button>
+    <a href="{{url_for('.download')}}">
+      <button type="button" class="btn btn-sm btn-outline-secondary">Export
+      </button>
+    </a>
   </div>
   {% block sub_content %}
   <div class="contrainer-fluid">

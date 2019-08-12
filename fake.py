@@ -48,7 +48,7 @@ def fakeRecord():
     db.session.commit()
 
 
-def main():
+def fake_data():
     with app.app_context():
         db.drop_all()
         db.create_all()
@@ -56,6 +56,9 @@ def main():
         fakeUser()
         fakeCourse()
         fakeRecord()
+
+
+def main():
     app.run(debug=True)
 
 
@@ -66,7 +69,7 @@ def db_test():
         data_dict = {(col, getattr(user, col))
                      for col in user.__table__.columns.keys()}
         pprint.pprint(data_dict)
-        pprint.pprint(Record.__table__.columns.keys())
+        pprint.pprint(Record.__name__)
 
 
 if __name__ == '__main__':

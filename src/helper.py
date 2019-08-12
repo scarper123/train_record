@@ -5,7 +5,11 @@
 # @Link    : http://example.org
 # @Version : $Id$
 
+import csv
+import pathlib
 import inspect
+
+BASEDIR = pathlib.Path(__file__).parent.parent
 
 PER_PAGE = 10
 
@@ -36,3 +40,21 @@ def fetch_pagination(model_cls):
         fields.remove(ext)
 
     return pagination, fields
+
+
+def download_file(model_cls):
+    all_data = map(lambda x: x.to_dict(), model_cls.query.all())
+    fields = model_cls.query.first().to_dict().keys()
+    output_dir = BASEDIR / 'output'
+    if not output_dir.exists():
+        output_dir.mkdir()
+    output_file = output_dir / '{}.csv'.format(model_cls.__name__)
+
+    with output_file.open('wt') as f:
+        writer = csv.DictWriter(f,
+                                dialect='unix',
+                                fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(all_data)
+
+    return str(output_file)

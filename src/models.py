@@ -22,6 +22,13 @@ class User(db.Model):
 
     exclude_fields = ['desc']
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'desc': self.desc
+        }
+
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,6 +44,13 @@ class Course(db.Model):
 
     exclude_fields = ['desc']
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'desc': self.desc
+        }
+
 
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -51,3 +65,12 @@ class Record(db.Model):
     comment = db.Column(db.String(128))
 
     exclude_fields = ['comment']
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user': self.user.name,
+            'course': self.course.name,
+            'logged': self.logged,
+            'comment': self.comment
+        }

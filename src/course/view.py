@@ -4,7 +4,7 @@
 # @Author  : Shanming (shanming0428@163.com)
 # @Version : 1.0.0
 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, send_file
 from . import course
 from .. import db
 from ..models import Course
@@ -32,7 +32,8 @@ def register():
             db.session.commit()
         return redirect(url_for('.index'))
     return render_template('_register.html',
-                           form=form)
+                           form=form,
+                           name="Course")
 
 
 @course.route('/<int:inst_id>', methods=['GET', 'POST'])
@@ -49,4 +50,13 @@ def edit(inst_id):
     else:
         form = helper.model_to_form(course, form)
         return render_template('_edit.html',
-                               form=form)
+                               form=form,
+                               name="Course[%s]" % inst_id)
+
+
+@course.route('/download', methods=['GET'])
+def download():
+    return send_file(helper.download_file(Course),
+                     mimetype='text/csv',
+                     attachment_filename='course.csv',
+                     as_attachment=True)

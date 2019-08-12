@@ -4,7 +4,7 @@
 # @Author  : Shanming (shanming0428@163.com)
 # @Version : 1.0.0
 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, send_file
 from . import record
 from .. import db
 from ..models import Record, User, Course
@@ -38,7 +38,8 @@ def register():
         return redirect(url_for('.index'))
 
     return render_template('_register.html',
-                           form=form)
+                           form=form,
+                           name="Record")
 
 
 @record.route('/<int:inst_id>', methods=['GET', 'POST'])
@@ -51,11 +52,20 @@ def edit(inst_id):
     if not record:
         return render_template('404.html')
     if form.validate_on_submit():
-        record = helper.form_to_model(form, Record)
+        record = helper.form_to_model(form, record)
         db.session.add(record)
         db.session.commit()
         return redirect(url_for('.index'))
     else:
         form = helper.model_to_form(record, form)
         return render_template('_edit.html',
-                               form=form)
+                               form=form,
+                               name="Record[%s]" % inst_id)
+
+
+@record.route('/download', methods=['GET'])
+def download():
+    return send_file(helper.download_file(Record),
+                     mimetype='text/csv',
+                     attachment_filename='record.csv',
+                     as_attachment=True)
