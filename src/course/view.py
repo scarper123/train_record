@@ -4,7 +4,7 @@
 # @Author  : Shanming (shanming0428@163.com)
 # @Version : 1.0.0
 
-from flask import render_template, redirect, url_for, send_file
+from flask import render_template, redirect, url_for, send_file, request
 from . import course
 from .. import db
 from ..models import Course
@@ -15,10 +15,18 @@ from .. import helper
 
 @course.route('/')
 def index():
-    pagination, fields = helper.fetch_pagination(Course)
+    query = None
+    q = request.args.get('q')
+    if q:
+        search = '%{}%'.format(request.args['q'])
+        q1 = Course.query.filter(Course.name.like(search))
+        q2 = Course.query.filter(Course.desc.like(search))
+        query = q1.union(q2)
+    pagination, fields = helper.fetch_pagination(Course, query)
     return render_template('_list.html',
                            pagination=pagination,
-                           fields=fields)
+                           fields=fields,
+                           search_value=q or "")
 
 
 @course.route('/register', methods=['GET', 'POST'])

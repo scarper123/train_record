@@ -3,7 +3,7 @@
 {% block content %}
 <div class="page">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <input type="text" placeholder="Search">
+    <input id="search" type="text" placeholder="Search" value="{{search_value}}" data-href="">
     <a href="{{url_for('.register')}}">
       <button type="button" class="btn btn-sm btn-outline-secondary">Add</button>
     </a>
@@ -51,6 +51,16 @@
     $(".clickable-row").click(function() {
       window.location = $(this).data("href");
     });
+
+    $("#search").keydown(function(event) {
+      if (event.which == 13) {
+        // let searchParams = new URLSearchParams(window.location.search);
+        // searchParams.delete('q')
+        // searchParams.set('q', this.value)
+        window.location.replace($(this).data("href") + "?q=" + this.value);
+      }
+    });
+
   });
 </script>
 {% endblock %}

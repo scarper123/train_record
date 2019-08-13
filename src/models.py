@@ -20,7 +20,7 @@ class User(db.Model):
                               backref='user',
                               lazy=True)
 
-    exclude_fields = ['desc']
+    # exclude_fields = ['desc']
 
     def to_dict(self):
         return {
@@ -42,7 +42,7 @@ class Course(db.Model):
                               backref='course',
                               lazy=True)
 
-    exclude_fields = ['desc']
+    # exclude_fields = ['desc']
 
     def to_dict(self):
         return {

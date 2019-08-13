@@ -32,8 +32,11 @@ def model_to_form(model, form):
     return form
 
 
-def fetch_pagination(model_cls):
-    pagination = model_cls.query.paginate(per_page=PER_PAGE)
+def fetch_pagination(model_cls, query=None):
+    if query:
+        pagination = query.paginate(per_page=PER_PAGE)
+    else:
+        pagination = model_cls.query.paginate(per_page=PER_PAGE)
     fields = getattr(model_cls, 'fields', model_cls.__table__.columns.keys())
     exclude_fields = getattr(model_cls, 'exclude_fields', [])
     for ext in exclude_fields:
